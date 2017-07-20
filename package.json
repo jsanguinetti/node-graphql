@@ -1,0 +1,14 @@
+{
+  "name": "node-graphql",
+  "version": "1.0.0",
+  "description": "Sample nodejs GraphQL server",
+  "main": "index.js",
+  "author": "jsanguinetti <jsangui@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "graphql": "^0.10.5",
+    "graphql-server-express": "^1.0.2",
+    "graphql-tools": "^1.1.0"
+  }
+}
