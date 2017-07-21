@@ -16,6 +16,7 @@ app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
+app.get('/', (req, res) => res.redirect('/graphiql'));
 
 const PORT = app.get('port');
 
