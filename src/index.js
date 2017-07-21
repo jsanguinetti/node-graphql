@@ -1,25 +1,30 @@
+if (process.env.NODE_ENV !== 'production') require('dotenv').config();
+
 const express = require('express');
-
-// This package automatically parses JSON requests.
 const bodyParser = require('body-parser');
-
-// This package will handle GraphQL server requests and responses
-// for you, based on your schema.
-const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
-
 const schema = require('./schema');
+const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
+const connectMongo = require('./mongo-connector');
 
-let app = express();
-app.set('port', (process.env.PORT || 5000));
+const start = async() => {
+  const mongo = await connectMongo();
+  let app = express();
+  app.set('port', (process.env.PORT || 5000));
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
-app.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql',
-}));
-app.get('/', (req, res) => res.redirect('/graphiql'));
+  app.use('/graphql', bodyParser.json(), graphqlExpress({
+    context: { mongo },
+    schema
+  }));
+  app.use('/graphiql', graphiqlExpress({
+    endpointURL: '/graphql',
+  }));
+  app.get('/', (req, res) => res.redirect('/graphiql'));
 
-const PORT = app.get('port');
+  const PORT = app.get('port');
 
-app.listen(PORT, () => {
-  console.log(`Hackernews GraphQL server running on port ${PORT}.`)
-});
+  app.listen(PORT, () => {
+    console.log(`Hackernews GraphQL server running on port ${PORT}.`)
+  });
+}
+
+start();
