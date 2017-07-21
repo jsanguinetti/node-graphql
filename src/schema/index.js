@@ -14,4 +14,7 @@ const typeDefs = `
 `;
 
 // Generate the schema object from your types definition.
-module.exports = makeExecutableSchema({typeDefs, resolvers});
+module.exports = makeExecutableSchema({
+  typeDefs,
+  resolvers
+});

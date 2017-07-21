@@ -5,14 +5,14 @@ const bodyParser = require('body-parser');
 
 // This package will handle GraphQL server requests and responses
 // for you, based on your schema.
-const {graphqlExpress, graphiqlExpress} = require('graphql-server-express');
+const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 
 const schema = require('./schema');
 
 let app = express();
 app.set('port', (process.env.PORT || 5000));
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
