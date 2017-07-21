@@ -2,11 +2,15 @@
   "name": "node-graphql",
   "version": "1.0.0",
   "description": "Sample nodejs GraphQL server",
-  "main": "index.js",
+  "main": "src/index.js",
   "author": "jsanguinetti <jsangui@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "dependencies": {
     "body-parser": "^1.17.2",
+    "express": "^4.15.3",
     "graphql": "^0.10.5",
     "graphql-server-express": "^1.0.2",
     "graphql-tools": "^1.1.0"
