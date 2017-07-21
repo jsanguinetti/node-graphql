@@ -6,7 +6,8 @@
   "author": "jsanguinetti <jsangui@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "debug": "node --inspect-brk src/index.js"
   },
   "dependencies": {
     "body-parser": "^1.17.2",
