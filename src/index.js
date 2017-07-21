@@ -10,13 +10,15 @@ const {graphqlExpress, graphiqlExpress} = require('graphql-server-express');
 const schema = require('./schema');
 
 let app = express();
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
+app.set('port', (process.env.PORT || 5000));
 
+app.use('/graphql', bodyParser.json(), graphqlExpress({schema}));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
 
-const PORT = 3000
+const PORT = app.get('port');
+
 app.listen(PORT, () => {
   console.log(`Hackernews GraphQL server running on port ${PORT}.`)
 });
