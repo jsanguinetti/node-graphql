@@ -6,7 +6,7 @@ const schema = require('./schema');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const connectMongo = require('./mongo-connector');
 
-const start = async() => {
+const start = async () => {
   const mongo = await connectMongo();
   let app = express();
   app.set('port', (process.env.PORT || 5000));
