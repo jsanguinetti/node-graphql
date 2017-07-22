@@ -1,7 +1,7 @@
 const basicAuth = require('express-basic-auth')
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
-const { encode } = require("jwt-simple");
+const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 console.log(JWT_SECRET);
 
@@ -59,7 +59,7 @@ module.exports = {
       let payload = {
           id: user._id
       };
-      return encode(payload, JWT_SECRET);
+      return jwt.sign(payload, JWT_SECRET);
     }
   }
 };
