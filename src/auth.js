@@ -17,6 +17,7 @@ function basicAuthAuthorizer(Users, req) {
     Users.findOne({
       email: username
     }, (err, user) => {
+      console.log("user from basic auth", user);
       let isUserAuthenticated = user && (user.password === password);
       if (isUserAuthenticated) {
         req.user = user;
