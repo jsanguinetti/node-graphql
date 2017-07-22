@@ -3,6 +3,7 @@ const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const { encode } = require("jwt-simple");
 const JWT_SECRET = process.env.JWT_SECRET;
+console.log(JWT_SECRET);
 
 const ExtractJwt = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
