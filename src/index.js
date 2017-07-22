@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const schema = require('./schema');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const connectMongo = require('./mongo-connector');
+const auth = require('./auth');
 
 const OpticsAgent = require('optics-agent');
 OpticsAgent.instrumentSchema(schema);
@@ -12,21 +13,32 @@ OpticsAgent.instrumentSchema(schema);
 const start = async () => {
   const mongo = await connectMongo();
   let app = express();
+  // TODO before pushing to heroku, must use passport and secure authentication
   app.use(OpticsAgent.middleware());
   app.set('port', (process.env.PORT || 5000));
 
-  app.use('/graphql', bodyParser.json(), graphqlExpress((req) => {
+  const buildOptions = (req, res) => {
     return {
       context: {
         mongo,
         opticsContext: OpticsAgent.context(req),
+        user: req.user
       },
       schema
-    }
-  }));
-  app.use('/graphiql', graphiqlExpress({
-    endpointURL: '/graphql',
-  }));
+    };
+  };
+
+  app.use(auth.initialize(mongo));
+  app.use('/graphql', auth.authenticate(), bodyParser.json(), graphqlExpress(buildOptions));
+  app.use('/graphiql',
+    auth.basicAuthAuthenticationMiddleware(mongo),
+    graphiqlExpress((req, res) => {
+      return {
+        endpointURL: '/graphql',
+        passHeader: `Authorization: 'JWT ${auth.generateToken(req.user)}'`
+      }
+    })
+  );
   app.get('/', (req, res) => res.redirect('/graphiql'));
 
   const PORT = app.get('port');
