@@ -1,9 +1,9 @@
+const {ObjectID} = require('mongodb')
 const basicAuth = require('express-basic-auth')
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
-console.log(JWT_SECRET);
 
 const ExtractJwt = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
@@ -17,7 +17,6 @@ function basicAuthAuthorizer(Users, req) {
     Users.findOne({
       email: username
     }, (err, user) => {
-      console.log("user from basic auth", user);
       let isUserAuthenticated = user && (user.password === password);
       if (isUserAuthenticated) {
         req.user = user;
@@ -39,9 +38,9 @@ module.exports = {
     });
   },
   authenticate: () => passport.authenticate('jwt', {session: false}),
-  initialize: ({Users, ObjectID}) => {
+  initialize: ({Users}) => {
     const strategy = new Strategy(params, (payload, done) => {
-        Users.findOne({_id: ObjectID(payload.id)}, (err, user) => {
+        Users.findOne({_id: new ObjectID(payload.id)}, (err, user) => {
           if (user) {
             return done(null, {
               _id: user._id
