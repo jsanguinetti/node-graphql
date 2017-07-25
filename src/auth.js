@@ -13,16 +13,15 @@ const params = {
 };
 
 function basicAuthAuthorizer(Users, req) {
-  return (username, password, cb) => {
-    Users.findOne({
+  return async (username, password, cb) => {
+    const user = await Users.findOne({
       email: username
-    }, (err, user) => {
-      let isUserAuthenticated = user && (user.password === password);
-      if (isUserAuthenticated) {
-        req.user = user;
-      }
-      cb(err, isUserAuthenticated);
     });
+    let isUserAuthenticated = user && (user.password === password);
+    if (isUserAuthenticated) {
+      req.user = user;
+    }
+    cb(null, isUserAuthenticated);
   }
 }
 
