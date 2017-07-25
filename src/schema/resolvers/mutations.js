@@ -1,4 +1,4 @@
-const {generateToken} = require('../auth');
+const {generateToken} = require('../../auth');
 const {ObjectID} = require('mongodb')
 const {URL} = require('url');
 
