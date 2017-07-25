@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const schema = require('./schema');
+const buildDataloaders = require('./dataloaders');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const connectMongo = require('./mongo-connector');
 const auth = require('./auth');
@@ -20,6 +21,7 @@ const start = async () => {
   const buildOptions = (req, res) => {
     return {
       context: {
+        dataloaders: buildDataloaders(mongo),
         mongo,
         opticsContext: OpticsAgent.context(req),
         user: req.user
