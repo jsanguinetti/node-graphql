@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const schema = require('./schema');
 const buildDataloaders = require('./dataloaders');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
+const formatError = require('./formatError');
 const connectMongo = require('./mongo-connector');
 const auth = require('./auth');
 
@@ -24,8 +25,9 @@ const start = async () => {
         dataloaders: buildDataloaders(mongo),
         mongo,
         opticsContext: OpticsAgent.context(req),
-        user: req.user
+        user: req.user,
       },
+      formatError,
       schema
     };
   };
