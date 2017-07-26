@@ -9,6 +9,10 @@ const formatError = require('./formatError');
 const connectMongo = require('./mongo-connector');
 const auth = require('./auth');
 
+const {execute, subscribe} = require('graphql');
+const {createServer} = require('http');
+const {SubscriptionServer} = require('subscriptions-transport-ws');
+
 const OpticsAgent = require('optics-agent');
 OpticsAgent.instrumentSchema(schema);
 
@@ -17,7 +21,10 @@ const start = async () => {
   let app = express();
   // TODO before pushing to heroku, must use passport and secure authentication
   app.use(OpticsAgent.middleware());
-  app.set('port', (process.env.PORT || 5000));
+  const HOST = (process.env.HOST || 'localhost'),
+        PORT = (process.env.PORT || 5000);
+  app.set('port', PORT);
+  app.set('host', HOST);
 
   const buildOptions = (req, res) => {
     return {
@@ -39,15 +46,20 @@ const start = async () => {
     graphiqlExpress((req, res) => {
       return {
         endpointURL: '/graphql',
-        passHeader: `Authorization: 'JWT ${auth.generateToken(req.user)}'`
+        passHeader: `Authorization: 'JWT ${auth.generateToken(req.user)}'`,
+        subscriptionsEndpoint: `ws://${HOST}:${PORT}/subscriptions`,
       }
     })
   );
   app.get('/', (req, res) => res.redirect('/graphiql'));
 
-  const PORT = app.get('port');
 
-  app.listen(PORT, () => {
+  const server = createServer(app);
+  server.listen(PORT, () => {
+    new SubscriptionServer(
+      {execute, subscribe, schema},
+      {server, path: '/subscriptions'},
+    );
     console.log(`Hackernews GraphQL server running on port ${PORT}.`)
   });
 }

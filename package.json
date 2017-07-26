@@ -20,11 +20,13 @@
     "express-basic-auth": "^1.1.1",
     "graphql": "^0.10.5",
     "graphql-server-express": "^1.0.2",
+    "graphql-subscriptions": "^0.4.4",
     "graphql-tools": "^1.1.0",
     "jsonwebtoken": "^7.4.1",
     "mongodb": "^2.2.30",
     "optics-agent": "^1.1.6",
     "passport": "^0.3.2",
-    "passport-jwt": "^2.2.1"
+    "passport-jwt": "^2.2.1",
+    "subscriptions-transport-ws": "^0.8.1"
   }
 }
